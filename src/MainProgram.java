@@ -7,9 +7,10 @@ public class MainProgram
 	{
 		
 		JFrame frame = new JFrame("Pride of TsuiNation");
-		frame.setSize(800,500);
-		frame.setVisible(true);
+		frame.setSize(400,400);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(new Trollformer());
+		frame.add(new Trollformer(frame));
+		frame.setVisible(true);
 	}
 }
