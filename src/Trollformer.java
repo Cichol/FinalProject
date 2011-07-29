@@ -35,38 +35,253 @@ public class Trollformer extends JComponent implements KeyListener
 		public void update()
 		{
 			p.gravity();
+			e.gravity();
 			p.movement();
+			e.movement();
 			cDetector();
+			eDetector();
 			repaint();
 		}
-		public void cDetector()
+		public void cDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
 		{
-			int checkY = 0;
-			int checkX = p.xPos / 16;
-			checkY = (p.yPos / 16);
-			if(checkY + 1 < map.length){
-				if(map[checkY + 1][checkX] != '.')
+			int checkY = ((p.yPos - 1) / 16); // INT -> ARRAY
+			int checkX = (p.xPos - 1) / 16; // INT -> ARRAY
+			death();
+			if(checkY + 1 < map.length)
+			{
+				/*
+				 * Ceiling Collision Check
+				 */
+				if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.')//top left corner up direction
 				{
-					//p.xPos -= p.xPos % 16;
-					//p.yPos -= p.yPos % 16;
+					p.yVel = 0;
+					p.yPos = (checkY + 1) * 16;
+				}
+				if(map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != '.') //top right corner
+				{
+					p.yVel = 0;
+					p.yPos = (checkY + 1) * 16;
+				}
+				/*
+				 * Floor Collision Check
+				 */
+				if(map[(p.yPos +15)/16][(p.xPos + 1)/16] != '.') //bottom left corner
+				{
+					p.yVel = 0;
+					p.yPos = checkY * 16;
+					p.jump = false;
+					System.out.println("BOTTOM LEFT CORNER COLLISION");
+				}
+				if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.') //bottom right corner
+				{
+					p.yVel = 0;
+					p.yPos = checkY * 16;
+					System.out.println("BOTTOM RIGHT CORNER COLLISION");
+					p.jump = false;
+				}
+				if(p.xVel > 0) //Check to see what direction the player is moving
+				{
+					//Check collision for moving right
+					if(map[(p.yPos + 1)/16][checkX + 1] != '.')
+					{
+						p.xVel = 0;
+						p.xPos = checkX * 16;
+					}
+				}
+				else if(p.xVel < 0)
+				{
+					if(map[(p.yPos + 5)/16][(p.xPos + 1)/16] != '.')
+					{
+						p.xVel = 0;
+						p.xPos = (checkX + 1) * 16;
+					}
+				}
+				/*
+				 * Left Collision Check
+				 */
+			/*
+			 	if(map[checkY][checkX] != '.')
+				{
+					p.xVel = 0;
+					p.xPos = (checkX + 1) * 16;
+				}*/
+				/*if(map[checkY + 1][checkX] != '.')
+				{
+					p.xVel = 0;
+					p.xPos = (checkX + 1) * 16;
+				}*/
+				/*
+				 * Right Collision Check
+				 */
+				/*if(map[checkY][checkX + 1] != '.')
+				{
+					p.xVel = 0;
+					p.xPos = checkX * 16;
+				}*/
+				/*if(map[checkY + 1][checkX + 1] != '.')
+				{
+					p.xVel = 0;
+					p.xPos = checkX * 16;
+				}*/
+				/*if(map[checkY + 1][checkX] != '.') // bottom left corner down direction
+				{
 					p.yVel = 0;
 					p.jump = false;
 					p.yPos = checkY * 16;
 				}
+				if(map[checkY][checkX] != '.') // bottom left corner down direction
+				{
+					p.yVel = 0;
+					p.jump = false;
+					p.yPos = checkY * 16;
+				}*/
+			}
+			else if( checkX + 1 < map[0].length )
+			{
+				/*if(map[checkY][checkX + 1] != '.') // top right corner right direction
+				{
+					p.xVel = 0;
+					p.xPos = checkX * 16;
+				}
+				if(map[checkY][checkX] != '.') // top left corner left direction
+				{
+					p.xVel = 0;
+					p.xPos = (checkX + 1) * 16;
+				}*/
 			}
 			else
 			{
-				//They died!
+
 			}
 			if(checkX + 1 >= map[0].length)
 			{
 				p.xPos = checkX * 16;
 				p.xVel = 0;
 			}
-			else if(checkX - 1 <= 0 )
+			else if(p.xPos < 0 )
 			{
 				p.xPos = checkX * 16;
 				p.xVel = 0;
+			}
+		}
+		public void eDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
+		{
+			int checkY = ((e.yPos - 1) / 16); // INT -> ARRAY
+			int checkX = (e.xPos - 1) / 16; // INT -> ARRAY
+			death();
+			if(checkY + 1 < map.length)
+			{
+				/*
+				 * Ceiling Collision Check
+				 */
+				if( map[(e.yPos + 1)/16][(e.xPos + 1)/16] != '.')//top left corner up direction
+				{
+					e.yVel = 0;
+					e.yPos = (checkY + 1) * 16;
+				}
+				if(map[(e.yPos + 1)/16][((e.xPos + 15)/16)] != '.') //top right corner
+				{
+					e.yVel = 0;
+					e.yPos = (checkY + 1) * 16;
+				}
+				/*
+				 * Floor Collision Check
+				 */
+				if(map[(e.yPos +15)/16][(e.xPos + 1)/16] != '.') //bottom left corner
+				{
+					e.yVel = 0;
+					e.yPos = checkY * 16;
+					System.out.println("BOTTOM LEFT CORNER COLLISION");
+				}
+				if(map[(e.yPos + 15)/16][(e.xPos + 15)/16] != '.') //bottom right corner
+				{
+					e.yVel = 0;
+					e.yPos = checkY * 16;
+					System.out.println("BOTTOM RIGHT CORNER COLLISION");
+				}
+				if(e.xVel > 0) //Check to see what direction the player is moving
+				{
+					//Check collision for moving right
+					if(map[(e.yPos + 1)/16][checkX + 1] != '.')
+					{
+						e.xVel = 0;
+						p.xPos = checkX * 16;
+					}
+				}
+				else if(e.xVel < 0)
+				{
+					if(map[(e.yPos + 5)/16][(e.xPos + 1)/16] != '.')
+					{
+						e.xVel = 0;
+						e.xPos = (checkX + 1) * 16;
+					}
+				}
+				/*
+				 * Left Collision Check
+				 */
+			/*
+			 	if(map[checkY][checkX] != '.')
+				{
+					e.xVel = 0;
+					e.xPos = (checkX + 1) * 16;
+				}*/
+				/*if(map[checkY + 1][checkX] != '.')
+				{
+					e.xVel = 0;
+					e.xPos = (checkX + 1) * 16;
+				}*/
+				/*
+				 * Right Collision Check
+				 */
+				/*if(map[checkY][checkX + 1] != '.')
+				{
+					e.xVel = 0;
+					e.xPos = checkX * 16;
+				}*/
+				/*if(map[checkY + 1][checkX + 1] != '.')
+				{
+					e.xVel = 0;
+					e.xPos = checkX * 16;
+				}*/
+				/*if(map[checkY + 1][checkX] != '.') // bottom left corner down direction
+				{
+					e.yVel = 0;
+					e.jump = false;
+					e.yPos = checkY * 16;
+				}
+				if(map[checkY][checkX] != '.') // bottom left corner down direction
+				{
+					e.yVel = 0;
+					e.jump = false;
+					e.yPos = checkY * 16;
+				}*/
+			}
+			else if( checkX + 1 < map[0].length )
+			{
+				/*if(map[checkY][checkX + 1] != '.') // top right corner right direction
+				{
+					e.xVel = 0;
+					e.xPos = checkX * 16;
+				}
+				if(map[checkY][checkX] != '.') // top left corner left direction
+				{
+					e.xVel = 0;
+					e.xPos = (checkX + 1) * 16;
+				}*/
+			}
+			else
+			{
+
+			}
+			if(checkX + 1 >= map[0].length)
+			{
+				e.xPos = checkX * 16;
+				e.xVel = 0;
+			}
+			else if(p.xPos < 0 )
+			{
+				e.xPos = checkX * 16;
+				e.xVel = 0;
 			}
 		}
 		
@@ -75,6 +290,7 @@ public class Trollformer extends JComponent implements KeyListener
 	private int width;
 	private int height;
 	Player p = new Player(8);
+	Enemy e = new Enemy(8);
 	GameThread thread = new GameThread();
 	JFrame f;
 	public Trollformer(JFrame frame)
@@ -94,6 +310,14 @@ public class Trollformer extends JComponent implements KeyListener
 	{
 		return p.yPos;
 	}
+	public void death()
+	{
+		if( p.yPos + 16 >= map.length * 16 )
+		{
+			p.xPos = 32;
+			p.yPos = 100;
+		}
+	}
 	public void mapLoader()
 	{
 		Scanner scan;
@@ -107,7 +331,6 @@ public class Trollformer extends JComponent implements KeyListener
 			for(int row = 0; row < height; row++)
 			{
 				String line = scan.next();
-				System.out.println(line);
 				for(int col = 0; col < width; col++)
 				{
 					map[row][col] = line.charAt(col); 
@@ -199,4 +422,3 @@ public class Trollformer extends JComponent implements KeyListener
 		
 	}
 }
-
