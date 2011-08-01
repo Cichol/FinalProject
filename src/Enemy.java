@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 
 
@@ -11,6 +12,8 @@ public class Enemy
 	public Enemy ( int maxGrav )
 	{
 		this.maxGrav = maxGrav;
+		yPos = 5;
+		xVel = 1;
 	}
 	public void movement (  )
 	{
@@ -26,10 +29,7 @@ public class Enemy
 	}
 	public void paint(Graphics g)
 	{
+		g.setColor(Color.GRAY);
 		g.fillRect(xPos, yPos, 16, 16);
 	}
-	public void bounce()
-	{
-		xVel = xVel * -1;
- 	}
 }

@@ -16,7 +16,7 @@ public class Player
 	boolean jump = false;
 	public Player ( int maxGrav )
 	{
-		this.maxGrav = maxGrav;
+		this.maxGrav = 3;
 	}
 	public void movement (  )
 	{
@@ -27,7 +27,7 @@ public class Player
 	{
 		if(yVel < maxGrav)
 		{
-			yVel += 4;
+			yVel += 1;
 		}
 	}
 	public void paint(Graphics g)
@@ -36,17 +36,17 @@ public class Player
 	}
 	public void moveRight()
 	{
-		xVel = 10;
+		xVel = 2;
 	}
 	public void moveLeft()
 	{
-		xVel = -10;
+		xVel = -2;
 	}
 	public void Jump()
 	{
 		if ( jump == false )
 		{
-			yVel = -20;
+			yVel = -10;
 			jump = true;
 		}
 	}
