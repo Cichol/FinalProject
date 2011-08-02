@@ -1,0 +1,88 @@
+165 13
+32 112
+ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddddddddddddddd....dddd....ddddd.......dd.....dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+..........ddddddd......dddd...............ddddddiii......dd.......L.................ddddddddddddddddddddddddddddddddddd.................d.ddd........................
+...........ddddd.........d.................ddddiid................L..................ddddddddddddddddddddddddddddddddd....ddd.ddd..VVV..d.....d......................
+............ddd.............................ddiid.................L......................................................dddd.ddd.......d...ddd.............B.B.B....
+.............d...............................did..................L.........dd..........................................ddddd.ddd..dd...d.....d.............bbbbb....
+..............................................i..................ddd.......dddd........................................dddd.....i..ddd....ddd.d.............b...b....
+ddddddddiiiiidd......dddiiidiiidiiiiiddddddddddVVVVdddddddddd...diiid...ddddddddddddddddddddddddIIIIIIIIIIIIIIIIII...ddddiiiiidddddddddddddddddd...VVVVVddddddddddddd
+ddddddddiiiiiddd....dddd...d...d...i...ddddddddddddddddddddddd.iiidiii.dddddddddddddddddddddddddd....................ddddiiiiidddddddddddddddddd...dddddddddddddddddd
+ddddddddiiiiidddd..ddddd...d...d...i...ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd...................ddddiiiiidddddddddddddddddd...dddddddddddddddddd
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+
+
+
+
+
+
+
+
+
+
+
+
+. = AIR
+
+g = GRASS
+
+d = DIRT
+
+c = CLOUD
+
+w = WOOD
+
+l = LEAVES
+
+b = BRICK
+
+b = CASTLETOP
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+m = MOVING PLATFORM
+	- = PATH ( HORIZONTAL )
+	| = PATH ( VERTICAL )
+
+start by moving right
+scan array for adjacent path objects ( for loops )
+	if ( moving right & path to right)
+		move right
+	else if ( moving left & path to left )
+		move left
+	else switch direction
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+L = LAVA
+kill player on contact
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+K = CRUSHING CLOUD
+if ( xPos of player = xPos of cloud )
+	yVel of cloud increases
+	all adjacent cloud pieces follow same procedure
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+I = INVISIBLE
+don't paint
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+i = INTANGIBLE
+if ( collision with player )
+	delete block
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+V = SUDDEN DEATH ( Visible )
+if ( collision with player )
+	return player to spawn point
+	play death animation ( ? )
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------
+D = SUDDEN DEATH ( inVisible )
+if ( collision with player )
+	return player to spawn point
+	play death animation ( ? )
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------

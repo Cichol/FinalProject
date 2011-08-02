@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.util.Scanner;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class Trollformer extends JComponent implements KeyListener
 {
@@ -45,6 +47,8 @@ public class Trollformer extends JComponent implements KeyListener
 			p.movement();
 			cDetector();
 			eDetector();
+			c.moveCam();
+			System.out.println(c.xPos + ", " + c.yPos);
 			repaint();
 		}
 		public void cDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
@@ -79,39 +83,74 @@ public class Trollformer extends JComponent implements KeyListener
 				 */
 				if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')//top left corner up direction
 				{
-					p.yVel = 0;
-					p.yPos = (checkY + 1) * 16;
+					if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'E')
+					{
+						p.xVel = 1;
+					}
+					else
+					{
+						p.yVel = 0;
+						p.yPos = (checkY + 1) * 16;
+					}
+
 				}
 				if(map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != '.' && map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != 't') //top right corner
 				{
-					p.yVel = 0;
-					p.yPos = (checkY + 1) * 16;
+					if(map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'E')
+					{
+						p.xVel = 1;
+					}
+					else
+					{
+						p.yVel = 0;
+						p.yPos = (checkY + 1) * 16;
+					}
 				}
 				/*
 				 * Floor Collision Check
 				 */
 				if(map[(p.yPos +15)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos +15)/16][(p.xPos + 1)/16] != 't') //bottom left corner
 				{
-					p.yVel = 0;
-					p.yPos = checkY * 16;
-					p.jump = false;
-					System.out.println("BOTTOM LEFT CORNER COLLISION");
+					if(map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'E')
+					{
+						p.xVel = 1;
+					}
+					else
+					{
+						p.yVel = 0;
+						p.yPos = checkY * 16;
+						p.jump = false;
+					}
+					//	System.out.println("BOTTOM LEFT CORNER COLLISION");
 				}
 				if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 't') //bottom right corner
 				{
-					p.yVel = 0;
-					p.yPos = checkY * 16;
-					System.out.println("BOTTOM RIGHT CORNER COLLISION");
-					p.jump = false;
+					if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
+					{
+						p.xVel = 1;
+					}
+					else
+					{
+						p.yVel = 0;
+						p.yPos = checkY * 16;
+
+					//	System.out.println("BOTTOM RIGHT CORNER COLLISION");
+						p.jump = false;
+					}
 				}
 				if(p.xVel > 0) //Check to see what direction the player is moving
 				{
 					//Check collision for moving right
 					if(map[(p.yPos + 1)/16][checkX + 1] != '.' && map[(p.yPos + 1)/16][checkX + 1] != 't')
-					{
-						p.xVel = 0;
+						if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
+						{
+							p.xVel = 1;
+						}
+						else
+						{
+							p.xVel = 0;
 						p.xPos = checkX * 16;
-					}
+						}
 				}
 				else if(p.xVel < 0)
 				{
@@ -239,16 +278,22 @@ public class Trollformer extends JComponent implements KeyListener
 	private int width;
 	private int height;
 	Player p = new Player(8);
+	Camera c;
 	LinkedList<Enemy> enemies = new LinkedList<Enemy>();
 	GameThread thread = new GameThread();
 	JFrame f;
+	BufferedImage offscreenImage;
+	Graphics g;
 	public Trollformer(JFrame frame)
 	{
 		f = frame;
 		this.map = map;
 		f.addKeyListener(this);
 		mapLoader();
+		c = new Camera(p, map);
 		thread.start();
+		offscreenImage = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
+		g = offscreenImage.getGraphics();
 
 	}
 	public int getXPos()
@@ -269,8 +314,9 @@ public class Trollformer extends JComponent implements KeyListener
 	public void mapLoader()
 	{
 		Scanner scan;
+		int mapNum = 1;
 		try {
-			scan = new Scanner((new File("map.txt")));
+			scan = new Scanner((new File( "Map " + mapNum + ".txt" )));
 			width = scan.nextInt();
 			height = scan.nextInt();
 			p.xPos = scan.nextInt();
@@ -290,21 +336,24 @@ public class Trollformer extends JComponent implements KeyListener
 				{
 					map[row][col] = line.charAt(col); 
 				}
+			mapNum++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	public void paint(Graphics g)
+	public void paint(Graphics offscreen)
 	{
-		p.paint(g);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, 400, 400);
+		p.paint(g, c);
 		for(int index = 0; index < enemies.size(); index++)
 		{
-			enemies.get(index).paint(g);
+			enemies.get(index).paint(g, c);
 		}
-		for(int row = 0; row < map.length; row++) //Within the for loops are for drawing terrain.
+		for(int row = c.yPos/16; row < map.length && row < (c.yPos + c.yRange)/16; row++) //Within the for loops are for drawing terrain.
 		{
-			for(int col = 0; col < map[0].length; col++)
+			for(int col = c.xPos/16; col < map[0].length && col < (c.xPos + c.xRange)/16; col++)
 			{
 				switch(map[row][col])
 				{
@@ -314,39 +363,43 @@ public class Trollformer extends JComponent implements KeyListener
 					break;
 				case 'd':
 					g.setColor(Color.BLACK);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'g':
 					g.setColor(Color.green);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 's':
 					g.setColor(Color.DARK_GRAY);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'b':
 					g.setColor(Color.RED);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;				
 				case 'B':
 					g.setColor(Color.BLUE);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'c':
 					g.setColor(Color.CYAN);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'w':
 					g.setColor(Color.orange);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'l':
 					g.setColor(Color.green);
-					g.fillRect(col * 16, row * 16, 16, 16);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
+				case 'E':
+					g.setColor(Color.PINK);
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 				}
 			}
 		}
+		offscreen.drawImage(offscreenImage, 0, 0, null);
 	}
 	@Override
 	public void keyPressed(KeyEvent e) 

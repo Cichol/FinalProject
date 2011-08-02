@@ -30,9 +30,10 @@ public class Player
 			yVel += 1;
 		}
 	}
-	public void paint(Graphics g)
+	public void paint(Graphics g, Camera c)
 	{
-		g.fillRect(xPos, yPos, 16, 16);
+		g.setColor(Color.BLACK);
+		g.fillRect(xPos - c.xPos, yPos - c.yPos, 16, 16);
 	}
 	public void moveRight()
 	{

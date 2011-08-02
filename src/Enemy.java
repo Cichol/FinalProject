@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 public class Enemy 
 {
+	
 	int xPos;
 	int yPos;
 	int xVel;
@@ -27,9 +28,9 @@ public class Enemy
 			yVel += 4;
 		}
 	}
-	public void paint(Graphics g)
+	public void paint(Graphics g, Camera c)
 	{
 		g.setColor(Color.GRAY);
-		g.fillRect(xPos, yPos, 16, 16);
+		g.fillRect(xPos - c.xPos, yPos - c.yPos, 16, 16);
 	}
 }
