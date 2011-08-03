@@ -21,18 +21,18 @@ public class Camera
 	public void moveCam()
 	{
 		//CEILING
-		if(player.yPos < yPos + 200 )
+		if(player.yPos < yPos + 100 )
 		{
-			yPos = player.yPos - 200;
+			yPos = player.yPos - 100;
 			if(yPos < 0)
 			{
 				yPos = 0;
 			}
 		}
 		//Floor
-		if(player.yPos > yPos + (yRange - 200))
+		if(player.yPos > yPos + (yRange - 100))
 		{
-			yPos = player.yPos + 200;
+			yPos = player.yPos + 100;
 		}
 		//Right
 		if(player.xPos > xPos + (xRange - 200))

@@ -1,20 +1,26 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.Timer;
+
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 public class Trollformer extends JComponent implements KeyListener
 {
+	public int mapNum = 1;
 	class GameThread extends Thread
 	{
 		Long lastTime;
@@ -48,7 +54,6 @@ public class Trollformer extends JComponent implements KeyListener
 			cDetector();
 			eDetector();
 			c.moveCam();
-			System.out.println(c.xPos + ", " + c.yPos);
 			repaint();
 		}
 		public void cDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
@@ -81,39 +86,62 @@ public class Trollformer extends JComponent implements KeyListener
 				/*
 				 * Ceiling Collision Check
 				 */
-				if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')//top left corner up direction
+				if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')//top left corner up direction
 				{
 					if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'E')
 					{
 						p.xVel = 1;
 					}
+					else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'i' )
+					{
+						map[(p.yPos + 1)/16][(p.xPos + 1)/16] = '.';
+					}
+					else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'V' )
+					{
+						death();
+					} 
 					else
 					{
 						p.yVel = 0;
 						p.yPos = (checkY + 1) * 16;
-					}
-
+					} //Checks for upper left corner
 				}
-				if(map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != '.' && map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != 't') //top right corner
+				if(map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != '.' && map[(p.yPos + 1)/16][(p.xPos + 15)/16] != 'c' && map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != 't') //top right corner
 				{
 					if(map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'E')
 					{
 						p.xVel = 1;
 					}
+					else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'i' )
+					{
+						map[(p.yPos + 1)/16][(p.xPos + 15)/16] = '.';
+					}
+					else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'V' )
+					{
+						death();
+					}
 					else
 					{
 						p.yVel = 0;
 						p.yPos = (checkY + 1) * 16;
-					}
+					} //Checks for upper right corner
 				}
 				/*
 				 * Floor Collision Check
 				 */
-				if(map[(p.yPos +15)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos +15)/16][(p.xPos + 1)/16] != 't') //bottom left corner
+				if(map[(p.yPos + 15)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos +15)/16][(p.xPos + 1)/16] != 't') //bottom left corner
 				{
 					if(map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'E')
 					{
 						p.xVel = 1;
+					}
+					else if ( map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'i' )
+					{
+						map[(p.yPos + 15)/16][(p.xPos + 1)/16] = '.';
+					}
+					else if ( map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'D'  || map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'V' )
+					{
+						death();
 					}
 					else
 					{
@@ -123,42 +151,63 @@ public class Trollformer extends JComponent implements KeyListener
 					}
 					//	System.out.println("BOTTOM LEFT CORNER COLLISION");
 				}
-				if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 't') //bottom right corner
+				if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 'c' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 't') //bottom right corner
 				{
 					if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
 					{
 						p.xVel = 1;
+					}
+					else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'i' )
+					{
+						map[(p.yPos + 15)/16][(p.xPos + 15)/16] = '.';
+					}
+					else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'V'  )
+					{
+						death();
 					}
 					else
 					{
 						p.yVel = 0;
 						p.yPos = checkY * 16;
 
-					//	System.out.println("BOTTOM RIGHT CORNER COLLISION");
+						System.out.println("BOTTOM RIGHT CORNER COLLISION");
 						p.jump = false;
 					}
 				}
 				if(p.xVel > 0) //Check to see what direction the player is moving
 				{
 					//Check collision for moving right
-					if(map[(p.yPos + 1)/16][checkX + 1] != '.' && map[(p.yPos + 1)/16][checkX + 1] != 't')
+					if(map[(p.yPos + 1)/16][checkX + 1] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][checkX + 1] != 't')
+						
 						if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
 						{
+							System.out.println("Right");
 							p.xVel = 1;
+							mapNum += 1;
+							mapLoader();
 						}
 						else
 						{
+							System.out.println("Right");
 							p.xVel = 0;
-						p.xPos = checkX * 16;
+							p.xPos = checkX * 16;
 						}
 				}
 				else if(p.xVel < 0)
 				{
-					if(map[(p.yPos + 5)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 5)/16][(p.xPos + 1)/16] != 't')
+					if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')
 					{
 						p.xVel = 0;
 						p.xPos = (checkX + 1) * 16;
 					}
+				}
+				else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'i' )
+				{
+					map[(p.yPos + 15)/16][(p.xPos + 15)/16] = '.';
+				}
+				else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'V'  )
+				{
+					death();
 				}
 				/*
 				 * Left Collision Check
@@ -167,12 +216,12 @@ public class Trollformer extends JComponent implements KeyListener
 			}
 			else if( checkX + 1 < map[0].length )
 			{
-				if(map[checkY][checkX + 1] != '.') // top right corner right direction
+				if(map[checkY][checkX + 1] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c') // top right corner right direction
 				{
 					p.xVel = 0;
 					p.xPos = checkX * 16;
 				}
-				if(map[checkY][checkX] != '.') // top left corner left direction
+				if(map[checkY][checkX] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c') // top left corner left direction
 				{
 					p.xVel = 0;
 					p.xPos = (checkX + 1) * 16;
@@ -279,14 +328,35 @@ public class Trollformer extends JComponent implements KeyListener
 	private int height;
 	Player p = new Player(8);
 	Camera c;
+	Mario m = new Mario();
 	LinkedList<Enemy> enemies = new LinkedList<Enemy>();
 	GameThread thread = new GameThread();
 	JFrame f;
 	BufferedImage offscreenImage;
 	Graphics g;
+
+	BufferedImage grass;
+	BufferedImage dirt;
+	BufferedImage wood;
+	BufferedImage leaf;
+	BufferedImage cake;
+	BufferedImage crystal;
+
+	Timer timer;
+	Mario mario;
+	BufferedImage sprite;
 	public Trollformer(JFrame frame)
 	{
+		timer = new Timer(100, new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				m.updateFrame();
+			}
+		});
 		f = frame;
+		loadImages();
 		this.map = map;
 		f.addKeyListener(this);
 		mapLoader();
@@ -306,15 +376,27 @@ public class Trollformer extends JComponent implements KeyListener
 	}
 	public void death()
 	{
-
-		p.xPos = 32;
+		mapLoader();
+		p.xPos = 32;	
 		p.yPos = 100;
 
+	}
+	public void loadImages()
+	{
+		try {
+			grass = ImageIO.read(new File("grass.png"));
+			dirt = ImageIO.read(new File("dirt.png"));
+			crystal = ImageIO.read(new File("crystal.png"));
+			wood = ImageIO.read(new File("wood.png"));
+			leaf = ImageIO.read(new File("leaf.png"));
+			cake = ImageIO.read(new File("cake.png"));
+		} catch (IOException e) {
+		}
 	}
 	public void mapLoader()
 	{
 		Scanner scan;
-		int mapNum = 1;
+		this.mapNum = mapNum;
 		try {
 			scan = new Scanner((new File( "Map " + mapNum + ".txt" )));
 			width = scan.nextInt();
@@ -336,7 +418,6 @@ public class Trollformer extends JComponent implements KeyListener
 				{
 					map[row][col] = line.charAt(col); 
 				}
-			mapNum++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -344,9 +425,17 @@ public class Trollformer extends JComponent implements KeyListener
 	}
 	public void paint(Graphics offscreen)
 	{
+		
+		timer.start();
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 400, 400);
-		p.paint(g, c);
+		if ( p.xVel == 0 )
+		{
+			m.loadImages();
+			m.state = 1;
+			
+		}
+		g.drawImage(m.getSprite(), p.xPos - c.xPos, p.yPos - c.yPos, null);
 		for(int index = 0; index < enemies.size(); index++)
 		{
 			enemies.get(index).paint(g, c);
@@ -361,41 +450,37 @@ public class Trollformer extends JComponent implements KeyListener
 					break;
 				case 't':
 					break;
-				case 'd':
-					g.setColor(Color.BLACK);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
-					break;
 				case 'g':
-					g.setColor(Color.green);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+					g.drawImage(grass, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
-				case 's':
-					g.setColor(Color.DARK_GRAY);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
-					break;
-				case 'b':
-					g.setColor(Color.RED);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
-					break;				
-				case 'B':
-					g.setColor(Color.BLUE);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+				case 'd':
+					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'c':
-					g.setColor(Color.CYAN);
+					g.setColor(new Color ( 205, 205, 205 ) );
 					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'w':
-					g.setColor(Color.orange);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+					g.drawImage(wood, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'l':
-					g.setColor(Color.green);
+					g.drawImage(leaf, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					break;
+				case 'b':
+					g.setColor(Color.red);
 					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
+				case 'i':
+					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					break;
+				case 'D':
+					break;
+				case 'V':
+					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					break;
 				case 'E':
-					g.setColor(Color.PINK);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+					g.drawImage(cake, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					break;
 				}
 			}
 		}
@@ -407,14 +492,19 @@ public class Trollformer extends JComponent implements KeyListener
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
 			p.moveRight();
+			m.facing = true;
+			m.state = 2;
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
 		{
 			p.moveLeft();
+			m.facing = false;
+			m.state = 2;
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_SPACE)
 		{
 			p.Jump();
+			m.state = 0;
 		}
 	}
 	@Override
