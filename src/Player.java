@@ -42,7 +42,7 @@ public class Player
 	{
 		if ( jump == false )
 		{
-			yVel = -10;
+			yVel = -12;
 			jump = true;
 		}
 	}

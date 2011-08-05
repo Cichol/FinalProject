@@ -58,156 +58,316 @@ public class Trollformer extends JComponent implements KeyListener
 		}
 		public void cDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
 		{
-			for(int a = 0; a < enemies.size(); a++)
+			if(dead == false)
 			{
-				if(enemies.get(a).xPos > p.xPos - 16 && enemies.get(a).xPos < p.xPos + 16 && enemies.get(a).yPos > p.yPos - 16 && enemies.get(a).yPos < p.yPos + 16)
+				for(int a = 0; a < enemies.size(); a++)
+				{
+					if(enemies.get(a).xPos > p.xPos - 16 && enemies.get(a).xPos < p.xPos + 16 && enemies.get(a).yPos > p.yPos - 16 && enemies.get(a).yPos < p.yPos + 16)
+					{
+						death();
+					}
+				}
+				if((p.yPos + 15)/16 >= map.length)
 				{
 					death();
 				}
+				int checkY = (p.yPos - 1) / 16; // INT -> ARRAY
+				int checkX = (p.xPos) / 16; // INT -> ARRAY
+				if(checkX + 1 >= map[0].length)
+				{
+					p.xPos = checkX * 16;
+					p.xVel = 0;
+				}
+				else if(p.xPos < 0 )
+					//map[(p.yPos + 5)/16][(p.xPos + 1)/16] = 'b';
+				{
+					p.xPos = checkX * 16;
+					p.xVel = 0;
+				}
+				if(checkY + 1 < map.length && p.yPos > 0 )
+				{
+					/*
+					 * Ceiling Collision Check
+					 */
+					if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.')//top left corner up direction
+					{
+						if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'E')
+						{
+							mapNum++;
+							enemies.clear();
+							mapLoader();
+
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'i' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 1)/16] = '.';
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'V' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 1)/16] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'I' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 1)/16] = 'b';
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'L' )
+						{
+							death();
+						}
+						else
+						{					
+							p.yVel = 0;
+							p.yPos = (checkY + 1) * 16;
+						}
+					}
+					if(map[(p.yPos + 1)/16][(p.xPos + 15)/16] != '.') //top right corner
+					{
+						if(map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'E')
+						{
+							mapNum++;
+							enemies.clear();
+							mapLoader();
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'i' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 15)/16] = '.';
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'V' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 15)/16] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'I' )
+						{
+							map[(p.yPos + 1)/16][(p.xPos + 15)/16] = 'b';
+						}
+						else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'L' )
+						{
+							death();
+						}
+						else
+						{
+							p.yVel = 0;
+							p.yPos = (checkY + 1) * 16;
+						}
+					}
+					/*
+					 * Floor Collision Check
+					 */
+					if(map[(p.yPos +15)/16][(p.xPos + 1)/16] != '.') //bottom left corner
+					{
+						if(map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'E')
+						{
+							mapNum++;
+							enemies.clear();
+							mapLoader();
+						}
+						else if ( map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'i' )
+						{
+							map[(p.yPos +15)/16][(p.xPos + 1)/16] = '.';
+						}
+						else if ( map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'D' || map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'V' )
+						{
+							map[(p.yPos +15)/16][(p.xPos + 1)/16] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'I' )
+						{
+							map[(p.yPos +15)/16][(p.xPos + 1)/16] = 'b';
+						}
+						else if ( map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'L' )
+						{
+							death();
+						}
+						else
+						{
+							p.yVel = 0;
+							p.yPos = checkY * 16;
+							p.jump = false;
+							if (p.xVel == 0)
+							{
+								m.state = 1;
+							}
+							else
+							{
+								m.state = 2;
+							}
+						}
+						//	System.out.println("BOTTOM LEFT CORNER COLLISION");
+					}
+					if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.') //bottom right corner
+					{
+						if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
+						{
+							mapNum++;
+							enemies.clear();
+							mapLoader();
+						}
+						else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'i' )
+						{
+							map[(p.yPos + 15)/16][(p.xPos + 15)/16] = '.';
+						}
+						else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'V' )
+						{
+							map[(p.yPos + 15)/16][(p.xPos + 15)/16] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'I' )
+						{
+							map[(p.yPos + 15)/16][(p.xPos + 15)/16] = 'b';
+						}
+						else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'L' )
+						{
+							death();
+						}
+						else
+						{
+							p.yVel = 0;
+							p.yPos = checkY * 16;
+							//	System.out.println("BOTTOM RIGHT CORNER COLLISION");
+							p.jump = false;
+						}
+					}
+					if(p.xVel > 0) //Check to see what direction the player is moving
+					{
+						//Check collision for moving right
+						if(map[(p.yPos + 1)/16][checkX + 1] != '.')
+						{
+							p.xPos = checkX * 16;
+						}
+						else if ( map[(p.yPos + 1)/16][checkX + 1] == 'i' )
+						{
+							map[(p.yPos + 1)/16][checkX + 1] = '.';
+						}
+						else if ( map[(p.yPos + 1)/16][checkX + 1] == 'D' || map[(p.yPos + 1)/16][checkX + 1] == 'V' )
+						{
+							map[(p.yPos + 1)/16][checkX + 1] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos + 1)/16][checkX + 1] == 'I' )
+						{
+							map[(p.yPos + 1)/16][checkX + 1] = 'b';
+						}
+						else if ( map[(p.yPos + 1)/16][checkX + 1] == 'L' )
+						{
+							death();
+						}
+					}
+					else if(p.xVel < 0)
+					{
+						if(map[(p.yPos + 5)/16][(p.xPos + 1)/16] != '.')
+						{
+							p.xPos = (checkX + 1) * 16;
+						}
+						if ( map[(p.yPos + 5)/16][(p.xPos + 1)/16] == 'i' )
+						{
+							map[(p.yPos + 5)/16][(p.xPos + 1)/16] = '.';
+						}
+						else if ( map[(p.yPos + 5)/16][(p.xPos + 1)/16] == 'D' || map[(p.yPos + 5)/16][(p.xPos + 1)/16] == 'V' )
+						{
+							map[(p.yPos + 5)/16][(p.xPos + 1)/16] = 'b';
+							death();
+						}
+						else if ( map[(p.yPos + 5)/16][(p.xPos + 1)/16] == 'I' )
+						{
+							map[(p.yPos + 5)/16][(p.xPos + 1)/16] = 'b';
+						}
+						else if ( map[(p.yPos + 5)/16][(p.xPos + 1)/16] == 'L' )
+						{
+							death();
+						}
+					}
+					/*
+					 * Left Collision Check
+					 */
+
+				}
+				else if( checkX + 1 < map[0].length && p.yPos <= 0)
+				{
+					if(map[checkY][checkX + 1] != '.') // top right corner right direction
+					{
+						p.xPos = checkX * 16;
+					}
+					if(map[checkY][checkX] != '.') // top left corner left direction
+					{
+						p.xPos = (checkX + 1) * 16;
+					}
+				}
 			}
-			int checkY = ((p.yPos - 1) / 16); // INT -> ARRAY
-			int checkX = (p.xPos) / 16; // INT -> ARRAY
-			if( p.yPos + 16 >= map.length * 16 )
+			else if(p.yPos > 300) 
 			{
-				death();
+				dead = false;
+				enemies.clear();
+				mapLoader();
 			}
+		}
+
+	}
+	public void eDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
+	{
+		for(int index = 0; index < enemies.size(); index++)
+		{
+			int checkY = ((enemies.get(index).yPos - 1) / 16); // INT -> ARRAY
+			int checkX = (enemies.get(index).xPos) / 16; // INT -> ARRAY
 			if(checkX + 1 >= map[0].length)
 			{
-				p.xPos = checkX * 16;
-				p.xVel = 0;
+				enemies.get(index).xPos = checkX * 16;
+				enemies.get(index).xVel = 0;
 			}
-			else if(p.xPos < 0 )
+			else if(enemies.get(index).xPos < 0 )
 			{
-				p.xPos = checkX * 16;
-				p.xVel = 0;
+				enemies.get(index).xPos = checkX * 16;
+				enemies.get(index).xVel = 0;
 			}
 			if(checkY + 1 < map.length)
 			{
 				/*
 				 * Ceiling Collision Check
 				 */
-				if( map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')//top left corner up direction
+				if( map[(enemies.get(index).yPos + 1)/16][(enemies.get(index).xPos + 1)/16] != '.')//top left corner up direction
 				{
-					if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'E')
-					{
-						p.xVel = 1;
-					}
-					else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'i' )
-					{
-						map[(p.yPos + 1)/16][(p.xPos + 1)/16] = '.';
-					}
-					else if ( map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 1)/16] == 'V' )
-					{
-						death();
-					} 
-					else
-					{
-						p.yVel = 0;
-						p.yPos = (checkY + 1) * 16;
-					} //Checks for upper left corner
+					enemies.get(index).yVel = 0;
+					enemies.get(index).yPos = (checkY + 1) * 16;
 				}
-				if(map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != '.' && map[(p.yPos + 1)/16][(p.xPos + 15)/16] != 'c' && map[(p.yPos + 1)/16][((p.xPos + 15)/16)] != 't') //top right corner
+				if(map[(enemies.get(index).yPos + 1)/16][((enemies.get(index).xPos + 15)/16)] != '.') //top right corner
 				{
-					if(map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'E')
-					{
-						p.xVel = 1;
-					}
-					else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'i' )
-					{
-						map[(p.yPos + 1)/16][(p.xPos + 15)/16] = '.';
-					}
-					else if ( map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 1)/16][(p.xPos + 15)/16] == 'V' )
-					{
-						death();
-					}
-					else
-					{
-						p.yVel = 0;
-						p.yPos = (checkY + 1) * 16;
-					} //Checks for upper right corner
+					enemies.get(index).yVel = 0;
+					enemies.get(index).yPos = (checkY + 1) * 16;
 				}
 				/*
 				 * Floor Collision Check
 				 */
-				if(map[(p.yPos + 15)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos +15)/16][(p.xPos + 1)/16] != 't') //bottom left corner
+				if(map[(enemies.get(index).yPos +15)/16][(enemies.get(index).xPos + 1)/16] != '.') //bottom left corner
 				{
-					if(map[(p.yPos +15)/16][(p.xPos + 1)/16] == 'E')
-					{
-						p.xVel = 1;
-					}
-					else if ( map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'i' )
-					{
-						map[(p.yPos + 15)/16][(p.xPos + 1)/16] = '.';
-					}
-					else if ( map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'D'  || map[(p.yPos + 15)/16][(p.xPos + 1)/16] == 'V' )
-					{
-						death();
-					}
-					else
-					{
-						p.yVel = 0;
-						p.yPos = checkY * 16;
-						p.jump = false;
-					}
+					enemies.get(index).yVel = 0;
+					enemies.get(index).yPos = checkY * 16;
+					//	enemies.get(index).jump = false;
 					//	System.out.println("BOTTOM LEFT CORNER COLLISION");
 				}
-				if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] != '.' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 'c' && map[(p.yPos + 15)/16][(p.xPos + 15)/16] != 't') //bottom right corner
+				if(map[(enemies.get(index).yPos + 15)/16][(enemies.get(index).xPos + 15)/16] != '.') //bottom right corner
 				{
-					if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
-					{
-						p.xVel = 1;
-					}
-					else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'i' )
-					{
-						map[(p.yPos + 15)/16][(p.xPos + 15)/16] = '.';
-					}
-					else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'V'  )
-					{
-						death();
-					}
-					else
-					{
-						p.yVel = 0;
-						p.yPos = checkY * 16;
-
-						System.out.println("BOTTOM RIGHT CORNER COLLISION");
-						p.jump = false;
-					}
+					enemies.get(index).yVel = 0;
+					enemies.get(index).yPos = checkY * 16;
+					//	System.out.println("BOTTOM RIGHT CORNER COLLISION");
+					//	enemies.get(index).jump = false;
 				}
-				if(p.xVel > 0) //Check to see what direction the player is moving
+				if(enemies.get(index).xVel > 0) //Check to see what direction the player is moving
 				{
 					//Check collision for moving right
-					if(map[(p.yPos + 1)/16][checkX + 1] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][checkX + 1] != 't')
-						
-						if(map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'E')
-						{
-							System.out.println("Right");
-							p.xVel = 1;
-							mapNum += 1;
-							mapLoader();
-						}
-						else
-						{
-							System.out.println("Right");
-							p.xVel = 0;
-							p.xPos = checkX * 16;
-						}
-				}
-				else if(p.xVel < 0)
-				{
-					if(map[(p.yPos + 1)/16][(p.xPos + 1)/16] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 't')
+					if(map[(enemies.get(index).yPos + 1)/16][checkX + 1] != '.')
 					{
-						p.xVel = 0;
-						p.xPos = (checkX + 1) * 16;
+						enemies.get(index).xVel *= -1;
+						enemies.get(index).xPos = checkX * 16;
 					}
 				}
-				else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'i' )
+				else if(enemies.get(index).xVel < 0)
 				{
-					map[(p.yPos + 15)/16][(p.xPos + 15)/16] = '.';
-				}
-				else if ( map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'D' || map[(p.yPos + 15)/16][(p.xPos + 15)/16] == 'V'  )
-				{
-					death();
+					if(map[(enemies.get(index).yPos + 5)/16][(enemies.get(index).xPos + 1)/16] != '.')
+					{
+						enemies.get(index).xVel *= -1;
+						enemies.get(index).xPos = (checkX + 1) * 16;
+					}
 				}
 				/*
 				 * Left Collision Check
@@ -216,116 +376,27 @@ public class Trollformer extends JComponent implements KeyListener
 			}
 			else if( checkX + 1 < map[0].length )
 			{
-				if(map[checkY][checkX + 1] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c') // top right corner right direction
+				if(map[checkY][checkX + 1] != '.') // top right corner right direction
 				{
-					p.xVel = 0;
-					p.xPos = checkX * 16;
+					enemies.get(index).xPos = checkX * 16;
 				}
-				if(map[checkY][checkX] != '.' && map[(p.yPos + 1)/16][(p.xPos + 1)/16] != 'c') // top left corner left direction
+				if(map[checkY][checkX] != '.') // top left corner left direction
 				{
-					p.xVel = 0;
-					p.xPos = (checkX + 1) * 16;
+					enemies.get(index).xPos = (checkX + 1) * 16;
 				}
 			}
 			else
 			{
 
 			}
-
 		}
-		public void eDetector() //IF TIME REMEMBER TO USE MOD TO DETECT WHICH SIDE MORE ON
-		{
-			for(int index = 0; index < enemies.size(); index++)
-			{
-				int checkY = ((enemies.get(index).yPos - 1) / 16); // INT -> ARRAY
-				int checkX = (enemies.get(index).xPos) / 16; // INT -> ARRAY
-				if(checkX + 1 >= map[0].length)
-				{
-					enemies.get(index).xPos = checkX * 16;
-					enemies.get(index).xVel = 0;
-				}
-				else if(enemies.get(index).xPos < 0 )
-				{
-					enemies.get(index).xPos = checkX * 16;
-					enemies.get(index).xVel = 0;
-				}
-				if(checkY + 1 < map.length)
-				{
-					/*
-					 * Ceiling Collision Check
-					 */
-					if( map[(enemies.get(index).yPos + 1)/16][(enemies.get(index).xPos + 1)/16] != '.')//top left corner up direction
-					{
-						enemies.get(index).yVel = 0;
-						enemies.get(index).yPos = (checkY + 1) * 16;
-					}
-					if(map[(enemies.get(index).yPos + 1)/16][((enemies.get(index).xPos + 15)/16)] != '.') //top right corner
-					{
-						enemies.get(index).yVel = 0;
-						enemies.get(index).yPos = (checkY + 1) * 16;
-					}
-					/*
-					 * Floor Collision Check
-					 */
-					if(map[(enemies.get(index).yPos +15)/16][(enemies.get(index).xPos + 1)/16] != '.') //bottom left corner
-					{
-						enemies.get(index).yVel = 0;
-						enemies.get(index).yPos = checkY * 16;
-						//	enemies.get(index).jump = false;
-						//	System.out.println("BOTTOM LEFT CORNER COLLISION");
-					}
-					if(map[(enemies.get(index).yPos + 15)/16][(enemies.get(index).xPos + 15)/16] != '.') //bottom right corner
-					{
-						enemies.get(index).yVel = 0;
-						enemies.get(index).yPos = checkY * 16;
-						//	System.out.println("BOTTOM RIGHT CORNER COLLISION");
-						//	enemies.get(index).jump = false;
-					}
-					if(enemies.get(index).xVel > 0) //Check to see what direction the player is moving
-					{
-						//Check collision for moving right
-						if(map[(enemies.get(index).yPos + 1)/16][checkX + 1] != '.')
-						{
-							enemies.get(index).xVel *= -1;
-							enemies.get(index).xPos = checkX * 16;
-						}
-					}
-					else if(enemies.get(index).xVel < 0)
-					{
-						if(map[(enemies.get(index).yPos + 5)/16][(enemies.get(index).xPos + 1)/16] != '.')
-						{
-							enemies.get(index).xVel *= -1;
-							enemies.get(index).xPos = (checkX + 1) * 16;
-						}
-					}
-					/*
-					 * Left Collision Check
-					 */
-
-				}
-				else if( checkX + 1 < map[0].length )
-				{
-					if(map[checkY][checkX + 1] != '.') // top right corner right direction
-					{
-						enemies.get(index).xVel *= -1;
-						enemies.get(index).xPos = checkX * 16;
-					}
-					if(map[checkY][checkX] != '.') // top left corner left direction
-					{
-						enemies.get(index).xVel *= -1;
-						enemies.get(index).xPos = (checkX + 1) * 16;
-					}
-				}
-				else
-				{
-
-				}
-			}
-		} 
-	}
+	} 
 	private char[][] map;
 	private int width;
 	private int height;
+
+	boolean dead = false;
+
 	Player p = new Player(8);
 	Camera c;
 	Mario m = new Mario();
@@ -335,12 +406,15 @@ public class Trollformer extends JComponent implements KeyListener
 	BufferedImage offscreenImage;
 	Graphics g;
 
-	BufferedImage grass;
-	BufferedImage dirt;
-	BufferedImage wood;
-	BufferedImage leaf;
+	BufferedImage background;
+	BufferedImage Grass;
+	BufferedImage Dirt;
+	BufferedImage Tree;
+	BufferedImage Leaves;
 	BufferedImage cake;
-	BufferedImage crystal;
+	BufferedImage Crystal;
+	BufferedImage Brick;
+	BufferedImage Lava;
 
 	Timer timer;
 	Mario mario;
@@ -360,7 +434,7 @@ public class Trollformer extends JComponent implements KeyListener
 		this.map = map;
 		f.addKeyListener(this);
 		mapLoader();
-		c = new Camera(p, map);
+		c = new Camera(p);
 		thread.start();
 		offscreenImage = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
 		g = offscreenImage.getGraphics();
@@ -375,21 +449,33 @@ public class Trollformer extends JComponent implements KeyListener
 		return p.yPos;
 	}
 	public void death()
-	{
-		mapLoader();
-		p.xPos = 32;	
-		p.yPos = 100;
-
+	{	
+		m.state = 3;
+		try {
+			p.xVel = 0;
+			p.yVel = 0;
+			m.state = 3;
+			thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		m.state = 3;
+		p.yPos += 5;
+		p.yVel = -20;
+		dead = true;
 	}
 	public void loadImages()
 	{
 		try {
-			grass = ImageIO.read(new File("grass.png"));
-			dirt = ImageIO.read(new File("dirt.png"));
-			crystal = ImageIO.read(new File("crystal.png"));
-			wood = ImageIO.read(new File("wood.png"));
-			leaf = ImageIO.read(new File("leaf.png"));
+			background = ImageIO.read(new File("space-background.jpg"));
+			Grass = ImageIO.read(new File("Grass.png"));
+			Dirt = ImageIO.read(new File("Dirt.png"));
+			Crystal = ImageIO.read(new File("Crystal.png"));
+			Tree = ImageIO.read(new File("Tree.png"));
+			Leaves = ImageIO.read(new File("Leaves.png"));
 			cake = ImageIO.read(new File("cake.png"));
+			Brick = ImageIO.read(new File("Brick.png"));
+			Lava = ImageIO.read(new File("lava.png"));
 		} catch (IOException e) {
 		}
 	}
@@ -397,7 +483,8 @@ public class Trollformer extends JComponent implements KeyListener
 	{
 		Scanner scan;
 		this.mapNum = mapNum;
-		try {
+		try
+		{
 			scan = new Scanner((new File( "Map " + mapNum + ".txt" )));
 			width = scan.nextInt();
 			height = scan.nextInt();
@@ -425,24 +512,22 @@ public class Trollformer extends JComponent implements KeyListener
 	}
 	public void paint(Graphics offscreen)
 	{
-		
+		g.drawImage(background, 0, 0, null);
 		timer.start();
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 400, 400);
-		if ( p.xVel == 0 )
+		if ( p.xVel == 0 && p.jump == false)
 		{
 			m.loadImages();
 			m.state = 1;
-			
+
 		}
 		g.drawImage(m.getSprite(), p.xPos - c.xPos, p.yPos - c.yPos, null);
 		for(int index = 0; index < enemies.size(); index++)
 		{
 			enemies.get(index).paint(g, c);
 		}
-		for(int row = c.yPos/16; row < map.length && row < (c.yPos + c.yRange)/16; row++) //Within the for loops are for drawing terrain.
+		for(int row = 0; row < map.length; row++) //Within the for loops are for drawing terrain.
 		{
-			for(int col = c.xPos/16; col < map[0].length && col < (c.xPos + c.xRange)/16; col++)
+			for(int col = 0; col < map[0].length; col++)
 			{
 				switch(map[row][col])
 				{
@@ -451,35 +536,41 @@ public class Trollformer extends JComponent implements KeyListener
 				case 't':
 					break;
 				case 'g':
-					g.drawImage(grass, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Grass, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'd':
-					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'c':
 					g.setColor(new Color ( 205, 205, 205 ) );
 					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
 					break;
 				case 'w':
-					g.drawImage(wood, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Tree, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'l':
-					g.drawImage(leaf, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Leaves, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'b':
-					g.setColor(Color.red);
-					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+					g.drawImage(Brick, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'i':
-					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'D':
 					break;
+				case 'B':
+					g.setColor(Color.blue );
+					g.fillRect(col * 16 - c.xPos, row * 16 - c.yPos, 16, 16);
+					break;
 				case 'V':
-					g.drawImage(dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					g.drawImage(Dirt, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				case 'E':
 					g.drawImage(cake, col * 16 - c.xPos, row * 16 - c.yPos, null);
+					break;
+				case 'L':
+					g.drawImage(Lava, col * 16 - c.xPos, row * 16 - c.yPos, null);
 					break;
 				}
 			}
@@ -491,20 +582,35 @@ public class Trollformer extends JComponent implements KeyListener
 	{
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
-			p.moveRight();
-			m.facing = true;
-			m.state = 2;
+			if(dead == false)
+			{
+				p.moveRight();
+				m.facing = true;
+				if (p.jump = false)
+				{
+					m.state = 2;
+				}
+			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT)
 		{
-			p.moveLeft();
-			m.facing = false;
-			m.state = 2;
+			if(dead == false)
+			{
+				p.moveLeft();
+				m.facing = false;
+				if (p.jump = false)
+				{
+					m.state = 2;
+				}
+			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_SPACE)
 		{
-			p.Jump();
-			m.state = 0;
+			if(dead == false)
+			{
+				p.Jump();
+				m.state = 0;
+			}
 		}
 	}
 	@Override

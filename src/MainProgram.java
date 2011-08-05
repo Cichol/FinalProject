@@ -7,8 +7,8 @@ public class MainProgram
 	{
 		
 		JFrame frame = new JFrame("Pride of TsuiNation");
-		frame.setSize(384,384);
-		
+		frame.setSize(384,280);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(new Trollformer(frame));
 		frame.setVisible(true);

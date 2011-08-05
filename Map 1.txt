@@ -1,6 +1,6 @@
 165 20
 32 112
-.....................................................................................................................................................................
+IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 .....................................................................................................................................................................
 .....................................................................................................................................................................
 .....................................................................................................................................................................
@@ -9,17 +9,17 @@
 ..................DD..................D.................................................................................................................KKK..........
 ..................DD..................D................................................................................................................KKKKK.........
 ..................DD..................D.................................................................................................................K.K..........
-.............bbbbbbb..................D............................................VVVVVVVVVVVVVVVVVVVVVV............................................................
-..................bb..................D...................................b..m.........................................................b.............................
-..................bb.........lll.....lll.....lll.....lll.....lll........bbb.................................I..........................bbb..................B.B.B....
-..................bb.........lwl.....lwl.....lwl.....lwl.....lwl......bbbbb..I..i..I..i..I..i..I..i..I..i..I...........................bbbbb................bbbbb....
-..................bb..........w.......w.......w.......w.......w.....bbbbbbb.....D.....D.....D.....D.....D..............................bbbbbbb..............b...b..E.
-gggggggggggggiiiiiiiiiigggggggggiigggggggiigggggggggggggggggggggggggggggggg............................................................ggggggggggggggggggggggDDDggggg
-dddddddddddddiiiiiiiiiidddddddddiiddiiiiiiiddddddddddddddddddddddddddddddddVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVddddddddddddddddddddddiiiddddd
-dddddddddddddiiiiiddddddddddddddiiddiiiiiiiddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddiiiddddd
-dddddddddddddiiiiiddddddddddddddiiddiidddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddiiiddddd
-dddddddddddddiiiiiddddddddddddddiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiddddd
-dddddddddddddiiiiiddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+.............bbbbbbb..................D..............................................................................................................................
+..................bb..................D...................................b...I.i.I.i.I.i.I.i.I.i.I.i.I.i.I.d.ddddddddddddiiiddididddiib.............................
+..................bb.........lll.....lll.....lll.....lll.....lll........bbb............................................................bbb..................B.B.B....
+..................bb.........lwl.....lwl.....lwl.....lwl.....lwl......bbbbb............................................................bbbbb................bbbbb....
+..................bb..........w.......w.......w.......w.......w.....bbbbbbb............................................................bbbbbbb..............b...b..E.
+gggggggggggggggiiiiiiiigggggggggiigggggggiigggggggggggggggggggggggggggggggg............................................................ggggggggggggggggggggggDDDggggg
+dddddddddddddddiiiiiiiidddddddddiiddiiiiiiidddddddddddddddddddddddddddddddd............................................................ddddddddddddddddddddddiiiddddd
+dddddddddddddddiiiddddddddddddddiiddiiiiiiiddddddddddddddddddddddddddddddddVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVddddddddddddddddddddddiiiddddd
+dddddddddddddddiiiddddddddddddddiiddiidddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddiiiddddd
+dddddddddddddddiiiddddddddddddddiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiddddd
+dddddddddddddddiiiddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
 
 
@@ -36,11 +36,11 @@ dddddddddddddiiiiidddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
 g = GRASS
 
-d = DIRT
+d = dIRT
 
-c = CLOUD
+c = CLOUd
 
-w = WOOD
+w = WOOd
 
 l = LEAVES
 
@@ -61,7 +61,7 @@ scan array for adjacent path objects ( for loops )
 	else switch direction
 
 --------------------------------------------------------------------------------------------------------------------------------------------
-K = CRUSHING CLOUD
+K = CRUSHING CLOUd
 if ( xPos of player = xPos of cloud )
 	yVel of cloud increases
 	all adjacent cloud pieces follow same procedure
@@ -76,13 +76,13 @@ if ( collision with player )
 	delete block
 
 --------------------------------------------------------------------------------------------------------------------------------------------
-V = SUDDEN DEATH ( Visible )
+V = SUddEN dEATH ( Visible )
 if ( collision with player )
 	return player to spawn point
 	play death animation ( ? )
  
 --------------------------------------------------------------------------------------------------------------------------------------------
-D = SUDDEN DEATH ( inVisible )
+d = SUddEN dEATH ( inVisible )
 if ( collision with player )
 	return player to spawn point
 	play death animation ( ? )
